@@ -14,6 +14,8 @@ setup(
     url='https://github.com/mlaponsky/pyyamllib',
     author='Max Laponsky',
     author_email='thebiglaponsky@gmail.com',
+    license='MIT',
+    keywords=['yml', 'yaml', 'config', 'configuration'],
     classifiers=[
         'Development Status :: 3 - Alpha',
         'License :: OSI Approved :: MIT License',
