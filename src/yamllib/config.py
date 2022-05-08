@@ -2,7 +2,7 @@ import yaml
 import json
 from collections.abc import MutableMapping
 from typing import Dict, Tuple, Any, Iterator
-from env import interpolate
+from yamllib.env import interpolate
 
 
 class YamlConfig(MutableMapping):
@@ -18,15 +18,16 @@ class YamlConfig(MutableMapping):
                 value = interpolate(value)
             self.__store[key] = value
 
-    def to_dict(self, secrets: Tuple[str, ...] = None) -> Dict:
-        if not secrets:
-            secrets = tuple()
+    def to_dict(self, secrets: Tuple[str, ...] = None, previous_key: str = None) -> Dict:
+        secrets = secrets or self.__SECRET
+        previous_key = previous_key or ''
         results = dict()
         for key, value in self.__store.items():
-            if key in secrets:
+            full_key = f"{previous_key}.{key}" if previous_key else key
+            if full_key in secrets:
                 value = '************'
             elif isinstance(value, YamlConfig):
-                value = value.to_dict(secrets=secrets)
+                value = value.to_dict(secrets=secrets, previous_key=full_key)
             results[key] = value
         return results
 
@@ -41,11 +42,15 @@ class YamlConfig(MutableMapping):
 
     def __setitem__(self, key: str, value: Any) -> None:
         if self.__frozen:
-            raise
-
+            raise AttributeError('Config is frozen. Cannot overwrite fields.')
+        self.__store[key] = value
+        return
 
     def __delitem__(self, key: str) -> None:
-        raise NotImplementedError
+        if self.__frozen:
+            raise AttributeError('Config is frozen. Cannot delete fields.')
+        del self.__store[key]
+        return
 
     def __getitem__(self, key: str) -> Any:
         return self.__store[key]
@@ -57,6 +62,21 @@ class YamlConfig(MutableMapping):
         return iter(self.__store)
 
     def get(self, *keys: str, default: Any = None) -> Any:
+        """
+        Gets a value from the config at the specified key location. Accepts any number of keys as
+        non-keyword arguments, which represent nested locations in the config. For example, if the
+        config has a section:
+        ```
+        config:
+            a:
+                b: value
+        ```
+        then get('config', 'a', 'b') returns 'value'.
+
+        :param keys:        Keys used to access field values
+        :param default:     A default value if the provided key does not exist.
+        :return:            the value at the provided key location, or else the default value.
+        """
         if len(keys) == 1:
             try:
                 return self.__getitem__(keys[0])

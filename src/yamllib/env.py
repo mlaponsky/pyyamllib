@@ -1,7 +1,7 @@
 import os
 import re
 from typing import Optional
-from types import cast, ConfigValue
+from yamllib.types import cast, ConfigValue
 
 ENVVAR_REGEX = re.compile(r'(\${[^}^{]+})')
 
