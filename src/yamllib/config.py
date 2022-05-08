@@ -2,7 +2,7 @@ import yaml
 import json
 from collections.abc import MutableMapping
 from typing import Dict, Tuple, Any, Iterator
-from yamllib.env import interpolate
+from env import interpolate
 
 
 class YamlConfig(MutableMapping):

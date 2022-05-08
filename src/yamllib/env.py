@@ -1,11 +1,12 @@
 import os
 import re
-from yamllib.types import cast, ConfigValue
+from typing import Optional
+from types import cast, ConfigValue
 
 ENVVAR_REGEX = re.compile(r'(\${[^}^{]+})')
 
 
-def interpolate(field: str) -> ConfigValue:
+def interpolate(field: str) -> Optional[ConfigValue]:
     next_idx = 0
     result = ''
     while True:
