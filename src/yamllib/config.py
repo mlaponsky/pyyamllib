@@ -8,11 +8,12 @@ from env import interpolate
 class YamlConfig(MutableMapping):
     __SECRET: Tuple[str, ...] = tuple()
 
-    def __init__(self, **kwargs):
+    def __init__(self, frozen: bool = False, **kwargs):
+        self.__frozen = frozen
         self.__store: Dict[str, Any] = dict()
         for key, value in kwargs.items():
             if isinstance(value, dict):
-                value = self.__class__(**value)
+                value = YamlConfig(**value)
             else:
                 value = interpolate(value)
             self.__store[key] = value
@@ -39,7 +40,9 @@ class YamlConfig(MutableMapping):
         return cls(**config)
 
     def __setitem__(self, key: str, value: Any) -> None:
-        raise NotImplementedError
+        if self.__frozen:
+            raise
+
 
     def __delitem__(self, key: str) -> None:
         raise NotImplementedError
