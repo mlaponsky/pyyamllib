@@ -4,11 +4,7 @@ PrimitiveValue = Union[str, int, float, bool]
 ConfigValue = Union[PrimitiveValue, List[PrimitiveValue]]
 
 
-def cast_primitive(value: PrimitiveValue) -> PrimitiveValue:
-    # Should not ever happen, but return value as-is if not a string.
-    if not isinstance(value, str):
-        return value
-
+def cast_primitive(value: str) -> PrimitiveValue:
     value_lower = value.lower()
 
     # Attempt to cast to boolean

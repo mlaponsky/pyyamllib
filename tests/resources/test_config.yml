@@ -1,0 +1,7 @@
+config:
+  basic: abc
+  list: abc,def,ghi
+  subsection:
+    subfield1: true
+    subfield2: 1.23
+single_field: 123
