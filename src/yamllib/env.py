@@ -25,8 +25,7 @@ def interpolate(field: PrimitiveValue) -> Optional[ConfigValue]:
             envvar, default = parts[0], ':'.join(parts[1:])
         value = os.getenv(envvar, default)
         if not value:
-            raise EnvironmentError(f"Environment variable {envvar} must be defined "
-                                   f"of have a defined default.")
+            return None
         result += field[next_idx:match.start()]
         result += str(value)
         next_idx = match.end()

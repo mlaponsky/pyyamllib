@@ -1,7 +1,7 @@
 import yaml
 import json
 from collections.abc import MutableMapping
-from typing import Dict, Any, Iterator, Set, Iterable, Union, List, Optional
+from typing import Dict, Iterator, Set, Iterable, Union, List, Optional
 from yamllib.types import PrimitiveValue
 from yamllib.env import interpolate
 

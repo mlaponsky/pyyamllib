@@ -5,6 +5,7 @@ from unittest import mock
 
 
 ENVVAR_WITHOUT_DEFAULT = "TEST_ENV"
+ENVVAR_WITH_NULL_DEFAULT = "TEST_ENV:"
 ENVVAR_WITH_DEFAULT = "TEST_ENV:abc"
 
 
@@ -24,8 +25,13 @@ def test_interpolate_field_with_defined_envvar_and_no_default():
 
 
 def test_interpolate_field_with_undefined_envvar_and_no_default():
-    with pytest.raises(EnvironmentError):
-        interpolate(format_envvar(ENVVAR_WITHOUT_DEFAULT))
+    result = interpolate(format_envvar(ENVVAR_WITHOUT_DEFAULT))
+    assert result is None
+
+
+def test_interpolate_field_with_undefined_envvar_and_null_default():
+    result = interpolate(format_envvar(ENVVAR_WITH_NULL_DEFAULT))
+    assert result is None
 
 
 def test_interpolate_field_with_undefined_envvar_and_default():

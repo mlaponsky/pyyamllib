@@ -1,5 +1,5 @@
 from yamllib.types import cast
-import pytest
+
 
 def test_cast_string():
     value = cast("abc")
